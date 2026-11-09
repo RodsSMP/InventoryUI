@@ -12,6 +12,7 @@ use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
 use pocketmine\player\Player;
 use pocketmine\scheduler\ClosureTask;
 use tedo0627\inventoryui\exception\IllegalInventorySizeException;
+use Closure;
 
 class CustomInventory extends SimpleInventory {
 
@@ -20,14 +21,19 @@ class CustomInventory extends SimpleInventory {
     private string $title;
     private int $length;
     private bool $scroll;
+	private Closure $onOpen;
+	private Closure $onClose;
     private array $entities = [];
 
-    public function __construct(int $size, string $title = "inventory", ?int $verticalLength = null) {
+    public function __construct(int $size, string $title = "inventory", ?int $verticalLength = null, ?Closure $onOpen = null, ?Closure $onClose = null) {
         if ($size < 0) {
             throw new IllegalInventorySizeException("The size of the inventory must be greater than 0");
         }
         parent::__construct($size);
-
+		
+		$this->onOpen = $onOpen;
+		$this->onClose = $onClose;
+		
         $this->title = $title;
         if ($verticalLength != null && 0 <= $verticalLength && $verticalLength <= 6) {
             $this->length = $verticalLength;
@@ -87,6 +93,9 @@ class CustomInventory extends SimpleInventory {
             unset($this->entities[$name]);
         }
 
+		if ($this->onOpen !== null) ($this->onOpen)($player);
+		if ($this->onClose !== null) ($this->onClose)($player);
+
         $this->close($who);
     }
 
@@ -109,14 +118,12 @@ class CustomInventory extends SimpleInventory {
      * Called when a player opens this inventory.
      */
     public function open(Player $player): void {
-
     }
 
     /**
      * Called every tick when someone opens inventory.
      */
     public function close(Player $player): void {
-
     }
 
     /**

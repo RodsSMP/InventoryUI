@@ -16,7 +16,6 @@ class InventoryUI {
 
     private static PluginBase $instance;
 
-    private const uuid = "21f0427f-572a-416d-a90e-c5d9becb0fa3";
     private const version = "1.1.0";
 
     public static function setup(PluginBase $plugin): void {
@@ -25,20 +24,6 @@ class InventoryUI {
         self::$instance = $plugin;
 
         $server = $plugin->getServer();
-
-        $manager = $server->getResourcePackManager();
-        if (!$manager->resourcePacksRequired()) {
-            throw new InventoryUIResourcePackException("'force_resources' must be set to 'true'");
-        }
-
-        $pack = $manager->getPackById(self::uuid);
-        if ($pack === null) {
-            throw new InventoryUIResourcePackException("Resource pack 'Inventory UI Resource Pack' not found");
-        }
-
-        if ($pack->getPackVersion() !== self::version) {
-            throw new InventoryUIResourcePackException("'Inventory UI Resource Pack' version did not match");
-        }
 
         $server->getPluginManager()->registerEvents(new EventListener(), $plugin);
 
