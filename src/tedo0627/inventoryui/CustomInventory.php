@@ -23,9 +23,10 @@ class CustomInventory extends SimpleInventory {
     private bool $scroll;
 	private Closure $onOpen;
 	private Closure $onClose;
+	private Closure $onClick;
     private array $entities = [];
 
-    public function __construct(int $size, string $title = "inventory", ?int $verticalLength = null, ?Closure $onOpen = null, ?Closure $onClose = null) {
+    public function __construct(int $size, string $title = "inventory", ?int $verticalLength = null, ?Closure $onOpen = null, ?Closure $onClose = null, ?Closure $onClick = null) {
         if ($size < 0) {
             throw new IllegalInventorySizeException("The size of the inventory must be greater than 0");
         }
@@ -132,7 +133,7 @@ class CustomInventory extends SimpleInventory {
      * @return bool If true, the operation is canceled.
      */
     public function click(Player $player, int $slot, Item $sourceItem, Item $targetItem): bool {
-        return false;
+        return ($this->onClick)($player, $slot, $sourceItem, $targetItem);
     }
 
     /**
