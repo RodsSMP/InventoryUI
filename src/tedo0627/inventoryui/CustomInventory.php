@@ -93,8 +93,8 @@ class CustomInventory extends SimpleInventory {
             unset($this->entities[$name]);
         }
 
-		if ($this->onOpen !== null) ($this->onOpen)($player);
-		if ($this->onClose !== null) ($this->onClose)($player);
+		if ($this->onOpen !== null) ($this->onOpen)($who);
+		if ($this->onClose !== null) ($this->onClose)($who);
 
         $this->close($who);
     }
