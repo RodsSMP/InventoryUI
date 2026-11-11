@@ -34,6 +34,7 @@ class CustomInventory extends SimpleInventory {
 		
 		$this->onOpen = $onOpen;
 		$this->onClose = $onClose;
+		$this->onClick = $onClick;
 		
         $this->title = $title;
         if ($verticalLength != null && 0 <= $verticalLength && $verticalLength <= 6) {
