@@ -21,9 +21,9 @@ class CustomInventory extends SimpleInventory {
     private string $title;
     private int $length;
     private bool $scroll;
-	private Closure $onOpen;
-	private Closure $onClose;
-	private Closure $onClick;
+	private ?Closure $onOpen = null;
+	private ?Closure $onClose = null;
+	private ?Closure $onClick = null;
     private array $entities = [];
 
     public function __construct(int $size, string $title = "inventory", ?int $verticalLength = null, ?Closure $onOpen = null, ?Closure $onClose = null, ?Closure $onClick = null) {
@@ -83,6 +83,7 @@ class CustomInventory extends SimpleInventory {
         parent::onOpen($who);
 
         $this->open($who);
+		if ($this->onOpen !== null) ($this->onOpen)($who);
     }
 
     public final function onClose(Player $who): void {
@@ -93,8 +94,6 @@ class CustomInventory extends SimpleInventory {
             $this->entities[$name]->close();
             unset($this->entities[$name]);
         }
-
-		if ($this->onOpen !== null) ($this->onOpen)($who);
 		if ($this->onClose !== null) ($this->onClose)($who);
 
         $this->close($who);
