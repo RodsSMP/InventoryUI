@@ -132,7 +132,7 @@ class CustomInventory extends SimpleInventory {
      * @return bool If true, the operation is canceled.
      */
     public function click(Player $player, int $slot, Item $sourceItem, Item $targetItem): bool {
-        return ($this->onClick)($player, $slot, $sourceItem, $targetItem);
+        return ($this->onClick !== null ? ($this->onClick)($player, $slot, $sourceItem, $targetItem) : false);
     }
 
     /**
