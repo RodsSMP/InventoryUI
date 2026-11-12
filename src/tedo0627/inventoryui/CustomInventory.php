@@ -66,17 +66,13 @@ class CustomInventory extends SimpleInventory {
         $link = new EntityLink($player->getId(), $entity->getId(), EntityLink::TYPE_RIDER, true, true, 0.0);
         $pk1 = SetActorLinkPacket::create($link);
 
-        // Delays became necessary from around version 1.21.90.
-        InventoryUI::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(function () use ($player, $id, $entity) {
-            if (!$player->isOnline()) return;
+        if (!$player->isOnline()) return;
+		$pk2 = ContainerOpenPacket::entityInv($id, WindowTypes::CONTAINER, $entity->getId());
+		$pk2->blockPosition = BlockPosition::fromVector3($entity->getLocation());
+        $player->getNetworkSession()->sendDataPacket($pk2);
 
-            $pk2 = ContainerOpenPacket::entityInv($id, WindowTypes::CONTAINER, $entity->getId());
-            $pk2->blockPosition = BlockPosition::fromVector3($entity->getLocation());
-            $player->getNetworkSession()->sendDataPacket($pk2);
-
-            $player->getNetworkSession()->getInvManager()->syncContents($this);
-        }), 10);
-
+        $player->getNetworkSession()->getInvManager()->syncContents($this);
+		
         return [$pk1];
     }
 
