@@ -48,7 +48,7 @@ class InventoryUI {
                 foreach ($list->getValue() as $childTag) {
                     if (!($childTag instanceof CompoundTag)) continue;
 
-                    $maxRuntimeId = max($childTag->getInt("rid"), $maxRuntimeId);
+                    $maxRuntimeId = max($childTag->getInt("rid", 0), $maxRuntimeId);
                 }
             }
 
